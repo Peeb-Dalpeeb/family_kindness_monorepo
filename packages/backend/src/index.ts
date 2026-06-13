@@ -421,9 +421,22 @@ app.delete(
   }),
 );
 
+// ── Global Error Handler Middleware ───────────────────────────
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('[backend] ✗ Global error caught:', err);
+  const errorMessage = err instanceof Error ? err.message : String(err);
+  
+  res.status(500).json({
+    success: false,
+    message: 'Internal Server Error',
+    error: errorMessage,
+  });
+});
+
 // ── Server Start ─────────────────────────────────────────────
 
 app.listen(PORT, () => {
   console.log(`[backend] ✓ Server running on http://localhost:${PORT}`);
   console.log(`[backend] ✓ Health check: http://localhost:${PORT}/api/health`);
 });
+
