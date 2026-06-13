@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert } from 'lucide-react';
 import { type KindnessEntry, type FamilyMember, type DashboardMetrics } from '@family-kindness/shared';
-import { ActivityFeed } from '../components/ActivityFeed.js';
+import { ActivityFeed } from '../components/ActivityFeed';
 
 export const Admin: React.FC = () => {
   const [entries, setEntries] = useState<KindnessEntry[]>([]);

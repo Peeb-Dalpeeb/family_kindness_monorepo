@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Heart, Sun, Moon, Home, Lock } from 'lucide-react';
-import { Dashboard } from './pages/Dashboard.js';
-import { Admin } from './pages/Admin.js';
-import { ProtectedRoute } from './components/ProtectedRoute.js';
+import { Dashboard } from './pages/Dashboard';
+import { Admin } from './pages/Admin';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function AppContent() {
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Activity, Plus } from 'lucide-react';
 import { METER_THRESHOLD, type DashboardMetrics, type FamilyMember, type PointsCategory } from '@family-kindness/shared';
-import { MilestoneBanner } from '../components/MilestoneBanner.js';
-import { RadialGauge } from '../components/RadialGauge.js';
-import { LogModal } from '../components/LogModal.js';
-import { CinematicMilestone } from '../components/CinematicMilestone.js';
+import { MilestoneBanner } from '../components/MilestoneBanner';
+import { RadialGauge } from '../components/RadialGauge';
+import { LogModal } from '../components/LogModal';
+import { CinematicMilestone } from '../components/CinematicMilestone';
 
 export const Dashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<DashboardMetrics>({
