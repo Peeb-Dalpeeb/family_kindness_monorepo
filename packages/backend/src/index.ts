@@ -94,34 +94,6 @@ async function seedDatabase(): Promise<void> {
         },
       ];
       await UserModel.insertMany(seedUsers);
-      console.log('[backend] ✓ Default family members seeded.');
-    }
-
-    const logCount = await KindnessEntryModel.countDocuments();
-    if (logCount === 0) {
-      console.log('[backend] Seeding default kindness entries...');
-      const seedEntries = [
-        {
-          submittedBy: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d1'), // mom
-          beneficiary: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d3'), // leo
-          category: 'Kind Words',
-          pointsAwarded: 10,
-          description:
-            'Leo, thank you for sharing your favorite building blocks with your younger sister Maya today without being prompted. It was marvelous to watch you guys cooperate!',
-          timestamp: new Date(Date.now() - 3 * 3600 * 1000),
-        },
-        {
-          submittedBy: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d3'), // leo
-          beneficiary: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d6'), // grandma
-          category: 'Helping Hand',
-          pointsAwarded: 20,
-          description:
-            'Leo spent 15 minutes helping Grandma Grandma move her heavy clay flower pots back into the veranda before the sudden rainstorm started.',
-          timestamp: new Date(Date.now() - 17 * 3600 * 1000),
-        },
-      ];
-      await KindnessEntryModel.insertMany(seedEntries);
-      console.log('[backend] ✓ Default kindness entries seeded.');
     }
   } catch (err: unknown) {
     console.error('[backend] ✗ Seeding failed:', err);
