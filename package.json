@@ -26,6 +26,9 @@
     "clean": "node -e \"const cp = require('child_process'); cp.execSync('tsc --build --clean', {stdio: 'inherit'}); cp.execSync('rimraf packages/backend/dist packages/frontend/dist packages/shared/dist', {stdio: 'inherit'});\"",
     "typecheck": "tsc --build"
   },
+  "dependencies": {
+    "typescript": "~5.8.2"
+  },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
     "concurrently": "^10.0.3",
@@ -35,7 +38,6 @@
     "prettier-plugin-tailwindcss": "^0.6.12",
     "rimraf": "^6.0.0",
     "tailwindcss": "^4.3.1",
-    "typescript": "~5.8.2",
     "typescript-eslint": "^8.33.0"
   }
 }
