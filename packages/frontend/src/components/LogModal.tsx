@@ -189,7 +189,11 @@ export const LogModal: React.FC<LogModalProps> = ({
                           : 'border-muted-espresso/10 hover:border-muted-espresso/20 bg-surface/25'
                       }`}
                     >
-                      <span className="text-2xl mb-1">{member.avatar}</span>
+                      {member.avatar && (member.avatar.includes('.') || member.avatar.startsWith('/')) ? (
+                        <img src={member.avatar} alt={member.name} className="w-8 h-8 rounded-full object-cover mb-1 select-none" />
+                      ) : (
+                        <span className="text-2xl mb-1">{member.avatar}</span>
+                      )}
                       <span className="text-xs font-semibold text-primary-espresso truncate w-full">
                         {member.name.split(' ')[0]}
                       </span>
@@ -239,7 +243,11 @@ export const LogModal: React.FC<LogModalProps> = ({
                             : 'border-muted-espresso/10 hover:border-muted-espresso/20 bg-surface/25'
                         }`}
                       >
-                        <span className="text-2xl mb-1">{member.avatar}</span>
+                        {member.avatar && (member.avatar.includes('.') || member.avatar.startsWith('/')) ? (
+                          <img src={member.avatar} alt={member.name} className="w-8 h-8 rounded-full object-cover mb-1 select-none" />
+                        ) : (
+                          <span className="text-2xl mb-1">{member.avatar}</span>
+                        )}
                         <span className="text-xs font-semibold text-primary-espresso truncate w-full">
                           {member.name.split(' ')[0]}
                         </span>

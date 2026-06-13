@@ -59,44 +59,37 @@ async function seedDatabase(): Promise<void> {
       const seedUsers = [
         {
           _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d1'),
-          name: 'Mom (Sarah)',
+          name: 'Mom (Anna)',
           avatar: '👩‍💼',
           color: '#8B5CF6',
           role: 'admin',
         },
         {
           _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d2'),
-          name: 'Dad (Michael)',
+          name: 'Scott',
           avatar: '👨‍🍳',
           color: '#3B82F6',
           role: 'admin',
         },
         {
           _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d3'),
-          name: 'Leo',
+          name: 'Abraham',
           avatar: '👦',
           color: '#F59E0B',
           role: 'standard',
         },
         {
           _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d4'),
-          name: 'Maya',
-          avatar: '👧',
+          name: 'Jane',
+          avatar: '/avatars/Jane.JPG',
           color: '#EC4899',
           role: 'standard',
         },
         {
           _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d5'),
-          name: 'Grandpa (Thomas)',
+          name: 'Dad (Scott)',
           avatar: '👴',
           color: '#10B981',
-          role: 'standard',
-        },
-        {
-          _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d6'),
-          name: 'Grandma (Elena)',
-          avatar: '👵',
-          color: '#6366F1',
           role: 'standard',
         },
       ];
@@ -425,7 +418,7 @@ app.delete(
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('[backend] ✗ Global error caught:', err);
   const errorMessage = err instanceof Error ? err.message : String(err);
-  
+
   res.status(500).json({
     success: false,
     message: 'Internal Server Error',
@@ -439,4 +432,3 @@ app.listen(PORT, () => {
   console.log(`[backend] ✓ Server running on http://localhost:${PORT}`);
   console.log(`[backend] ✓ Health check: http://localhost:${PORT}/api/health`);
 });
-

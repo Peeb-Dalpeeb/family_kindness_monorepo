@@ -139,7 +139,11 @@ export const Admin: React.FC = () => {
                 key={m.id} 
                 className="bg-canvas border border-muted-espresso/10 p-3 rounded-2xl flex flex-col items-center text-center shadow-xs"
               >
-                <span className="text-2xl mb-1 select-none">{m.avatar}</span>
+                {m.avatar && (m.avatar.includes('.') || m.avatar.startsWith('/')) ? (
+                  <img src={m.avatar} alt={m.name} className="w-8 h-8 rounded-full object-cover mb-1 select-none" />
+                ) : (
+                  <span className="text-2xl mb-1 select-none">{m.avatar}</span>
+                )}
                 <span className="text-xs font-bold text-primary-espresso truncate w-full">{m.name}</span>
                 <span className="text-[9px] text-muted-espresso mt-0.5 uppercase tracking-wide">
                   ★ {submitCount} Given • {beneficiaryCount} Recv

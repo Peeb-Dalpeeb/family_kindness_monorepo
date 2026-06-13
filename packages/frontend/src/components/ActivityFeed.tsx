@@ -142,7 +142,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                       >
                         {familyMembers.map(m => (
                           <option key={m.id} value={m.id}>
-                            {m.avatar} {m.name}
+                            {m.avatar && (m.avatar.includes('.') || m.avatar.startsWith('/')) ? '' : `${m.avatar} `}{m.name}
                           </option>
                         ))}
                       </select>
@@ -161,7 +161,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                           .filter(m => m.id !== editSubBy)
                           .map(m => (
                             <option key={m.id} value={m.id}>
-                              {m.avatar} {m.name}
+                              {m.avatar && (m.avatar.includes('.') || m.avatar.startsWith('/')) ? '' : `${m.avatar} `}{m.name}
                             </option>
                           ))}
                       </select>
@@ -257,7 +257,11 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                     <div className="flex items-center gap-2 text-xs font-semibold text-primary-espresso">
                       {/* Submitter */}
                       <div className="flex items-center gap-1.5 bg-canvas/60 px-2.5 py-1 rounded-full border border-muted-espresso/5">
-                        <span className="text-sm">{submitter?.avatar || '❓'}</span>
+                        {submitter?.avatar && (submitter.avatar.includes('.') || submitter.avatar.startsWith('/')) ? (
+                          <img src={submitter.avatar} alt={submitter.name} className="w-5 h-5 rounded-full object-cover select-none" />
+                        ) : (
+                          <span className="text-sm">{submitter?.avatar || '❓'}</span>
+                        )}
                         <span>{submitter?.name || 'Unknown'}</span>
                       </div>
                       
@@ -265,7 +269,11 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                       
                       {/* Beneficiary */}
                       <div className="flex items-center gap-1.5 bg-canvas/60 px-2.5 py-1 rounded-full border border-muted-espresso/5">
-                        <span className="text-sm">{beneficiaryInstance?.avatar || '❓'}</span>
+                        {beneficiaryInstance?.avatar && (beneficiaryInstance.avatar.includes('.') || beneficiaryInstance.avatar.startsWith('/')) ? (
+                          <img src={beneficiaryInstance.avatar} alt={beneficiaryInstance.name} className="w-5 h-5 rounded-full object-cover select-none" />
+                        ) : (
+                          <span className="text-sm">{beneficiaryInstance?.avatar || '❓'}</span>
+                        )}
                         <span>{beneficiaryInstance?.name || 'Unknown'}</span>
                       </div>
                     </div>
