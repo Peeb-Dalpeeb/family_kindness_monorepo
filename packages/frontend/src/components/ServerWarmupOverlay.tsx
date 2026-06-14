@@ -23,7 +23,7 @@ export const ServerWarmupOverlay: React.FC<ServerWarmupOverlayProps> = ({ onConn
     } else if (elapsed < 25) {
       return 'Almost there! The server is stretching and getting ready...';
     } else {
-      return 'Warming up the database. Thanks for your patience! ☕';
+      return 'Warming up the database. Thanks for your patience!';
     }
   };
 

@@ -208,11 +208,6 @@ export const LogModal: React.FC<LogModalProps> = ({
               <div className="flex justify-between items-baseline">
                 <label className="text-sm font-semibold text-primary-espresso flex items-center gap-1.5">
                   <span>Who was this act for? (Beneficiary)</span>
-                  {submittedBy && (
-                    <span className="text-[10px] bg-muted-espresso/5 text-muted-espresso px-2 py-0.5 rounded-md">
-                      Excludes submitter
-                    </span>
-                  )}
                 </label>
                 {validationError.beneficiary && (
                   <span className="text-xs font-medium text-amber-success flex items-center gap-1">
@@ -385,7 +380,7 @@ export const LogModal: React.FC<LogModalProps> = ({
             </div>
 
             {/* Error panel overview */}
-            {Object.keys(validationError).length > 0 && (
+            {Object.values(validationError).some(Boolean) && (
               <div className="p-3.5 bg-amber-bg border border-amber-success/20 rounded-2xl flex items-start gap-2.5 text-amber-success">
                 <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                 <div>
