@@ -37,7 +37,7 @@
       "repomix-output.txt",
       "repomix-output.md",
       "repomix-output.json",
-      "docs/mockup.xml",
+      "**/docs/mockup.xml",
       "package-lock.json",
       "yarn.lock",
       "pnpm-lock.yaml",

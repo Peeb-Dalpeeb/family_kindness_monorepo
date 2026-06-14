@@ -69,7 +69,7 @@ async function seedDatabase(): Promise<void> {
           name: 'Scott',
           avatar: '👨‍🍳',
           color: '#3B82F6',
-          role: 'admin',
+          role: 'standard',
         },
         {
           _id: new mongoose.Types.ObjectId('60d5ec493d8b4c2e6462b5d3'),
@@ -90,7 +90,7 @@ async function seedDatabase(): Promise<void> {
           name: 'Dad (Scott)',
           avatar: '👴',
           color: '#10B981',
-          role: 'standard',
+          role: 'admin',
         },
       ];
       await UserModel.insertMany(seedUsers);
