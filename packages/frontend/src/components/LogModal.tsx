@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Sparkles, AlertCircle, HeartHandshake } from 'lucide-react';
-import { FamilyMember, PointsCategory } from '@family-kindness/shared';
+import { FamilyMember, PointsCategory, DESCRIPTION_MAX_LENGTH } from '@family-kindness/shared';
 
 interface LogModalProps {
   isOpen: boolean;
@@ -66,7 +66,7 @@ export const LogModal: React.FC<LogModalProps> = ({
     const val = e.target.value;
     setDescription(val);
     
-    if (val.length > 200) {
+    if (val.length > DESCRIPTION_MAX_LENGTH) {
       setValidationError(prev => ({
         ...prev,
         description: 'Exceeded maximum length of 200 characters.'
@@ -90,7 +90,7 @@ export const LogModal: React.FC<LogModalProps> = ({
     if (!category) errors.category = 'Please select a kindness category.';
     if (!description.trim()) {
       errors.description = 'Please include a brief description of what happened.';
-    } else if (description.length > 200) {
+    } else if (description.length > DESCRIPTION_MAX_LENGTH) {
       errors.description = 'Your description exceeds 200 characters.';
     }
 
@@ -352,7 +352,7 @@ export const LogModal: React.FC<LogModalProps> = ({
               <textarea
                 value={description}
                 onChange={handleDescriptionChange}
-                maxLength={220}
+                maxLength={DESCRIPTION_MAX_LENGTH}
                 placeholder="Leo helped Grandma pack some cookies or Grandpa told Mom how much he loves dinner..."
                 rows={3}
                 className={`w-full p-3 rounded-2xl text-sm border bg-surface/10 focus:outline-none focus:ring-1 transition-all ${
@@ -369,7 +369,7 @@ export const LogModal: React.FC<LogModalProps> = ({
                 </span>
                 <span 
                   className={`font-mono font-semibold ${
-                    description.length > 200 
+                    description.length > DESCRIPTION_MAX_LENGTH
                       ? 'text-amber-success' 
                       : 'text-muted-espresso'
                   }`}
