@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { OTHER_POINT_OPTIONS } from '@family-kindness/shared';
 
-/** Static point options — allocated once outside the render cycle. */
-const POINT_OPTIONS = [5, 10, 15, 20] as const;
+/** Point options are defined in @family-kindness/shared/constants. */
 
 interface CustomPointsPickerProps {
   selectedPoints: number;
@@ -28,7 +28,7 @@ export const CustomPointsPicker: React.FC<CustomPointsPickerProps> = ({
       </div>
 
       <div className="grid grid-cols-4 gap-2">
-        {POINT_OPTIONS.map((val) => {
+        {OTHER_POINT_OPTIONS.map((val) => {
           const isActive = selectedPoints === val;
           return (
             <button

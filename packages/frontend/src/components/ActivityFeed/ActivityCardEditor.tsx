@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { Check, X } from 'lucide-react';
-import { KindnessEntry, FamilyMember, PointsCategory } from '@family-kindness/shared';
+import {
+  KindnessEntry,
+  FamilyMember,
+  PointsCategory,
+  KINDNESS_CATEGORIES,
+  CATEGORY_METADATA,
+  POINTS_MATRIX,
+  OTHER_POINT_OPTIONS,
+  DESCRIPTION_MAX_LENGTH,
+  resolvePoints,
+} from '@family-kindness/shared';
 
 interface ActivityCardEditorProps {
   entry: KindnessEntry;
@@ -29,7 +39,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
   const [editBeneficiary, setEditBeneficiary] = useState<string>(entry.beneficiary);
 
   const handleSave = () => {
-    if (!editDesc.trim() || editDesc.length > 200) {
+    if (!editDesc.trim() || editDesc.length > DESCRIPTION_MAX_LENGTH) {
       return; // prevent saving invalid entries
     }
     if (editSubBy === editBeneficiary) {
@@ -117,16 +127,25 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
             onChange={(e) => {
               const cat = e.target.value as PointsCategory;
               setEditCategory(cat);
-              if (cat === 'Kind Words') setEditPoints(10);
-              else if (cat === 'Showing Gratitude') setEditPoints(15);
-              else if (cat === 'Helping Hand') setEditPoints(20);
+              if (cat !== 'Other') {
+                setEditPoints(resolvePoints(cat));
+              } else if (!(OTHER_POINT_OPTIONS as readonly number[]).includes(editPoints)) {
+                setEditPoints(OTHER_POINT_OPTIONS[0]);
+              }
             }}
             className="bg-canvas border-muted-espresso/10 text-primary-espresso focus:ring-kindness w-full rounded-xl border p-2 text-xs focus:border-transparent focus:ring-1 focus:outline-none"
           >
-            <option value="Kind Words">💬 Kind Words (10 pts)</option>
-            <option value="Showing Gratitude">🙏 Showing Gratitude (15 pts)</option>
-            <option value="Helping Hand">🤝 Helping Hand (20 pts)</option>
-            <option value="Other">✨ Other (Custom variable)</option>
+            {KINDNESS_CATEGORIES.map((cat) => {
+              const meta = CATEGORY_METADATA[cat];
+              const ptsLabel = cat === 'Other'
+                ? 'Custom variable'
+                : `${String(POINTS_MATRIX[cat])} pts`;
+              return (
+                <option key={cat} value={cat}>
+                  {meta.icon} {cat} ({ptsLabel})
+                </option>
+              );
+            })}
           </select>
         </div>
 
@@ -142,7 +161,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
             disabled={editCategory !== 'Other'}
             className="bg-canvas border-muted-espresso/10 text-primary-espresso focus:ring-kindness w-full rounded-xl border p-2 text-xs focus:border-transparent focus:ring-1 focus:outline-none disabled:opacity-60"
           >
-            {[5, 10, 15, 20].map((val) => (
+            {OTHER_POINT_OPTIONS.map((val) => (
               <option key={val} value={val}>
                 +{val} pts
               </option>
@@ -154,7 +173,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
       {/* Edit Textarea Description */}
       <div className="space-y-1">
         <label className="text-primary-espresso block text-xs font-bold">
-          Description text (Max 200 Chars):
+          Description text (Max {DESCRIPTION_MAX_LENGTH} Chars):
         </label>
         <textarea
           value={editDesc}
@@ -165,7 +184,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
           className="bg-canvas border-muted-espresso/10 text-primary-espresso focus:ring-kindness w-full rounded-xl border p-2 text-xs focus:border-transparent focus:ring-1 focus:outline-none"
         />
         <div className="text-muted-espresso text-right font-mono text-[10px]">
-          {editDesc.length} / 200 characters
+          {editDesc.length} / {DESCRIPTION_MAX_LENGTH} characters
         </div>
       </div>
 
@@ -182,7 +201,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
           type="button"
           disabled={
             editDesc.length === 0 ||
-            editDesc.length > 200 ||
+            editDesc.length > DESCRIPTION_MAX_LENGTH ||
             editSubBy === editBeneficiary
           }
           onClick={handleSave}
