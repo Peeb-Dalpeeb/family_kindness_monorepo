@@ -62,9 +62,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
         <h5 className="text-kindness text-xs font-bold tracking-wider uppercase">
           🛠️ Inline Card Editor
         </h5>
-        <span className="text-muted-espresso font-mono text-[10px]">
-          ID: {entry.id}
-        </span>
+        <span className="text-muted-espresso font-mono text-[10px]">ID: {entry.id}</span>
       </div>
 
       {/* Edit Roles Inputs */}
@@ -119,9 +117,7 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
       {/* Edit Category and Points */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <label className="text-primary-espresso mb-1 block text-xs font-bold">
-            Category:
-          </label>
+          <label className="text-primary-espresso mb-1 block text-xs font-bold">Category:</label>
           <select
             value={editCategory}
             onChange={(e) => {
@@ -137,9 +133,8 @@ export const ActivityCardEditor: React.FC<ActivityCardEditorProps> = ({
           >
             {KINDNESS_CATEGORIES.map((cat) => {
               const meta = CATEGORY_METADATA[cat];
-              const ptsLabel = cat === 'Other'
-                ? 'Custom variable'
-                : `${String(POINTS_MATRIX[cat])} pts`;
+              const ptsLabel =
+                cat === 'Other' ? 'Custom variable' : `${String(POINTS_MATRIX[cat])} pts`;
               return (
                 <option key={cat} value={cat}>
                   {meta.icon} {cat} ({ptsLabel})

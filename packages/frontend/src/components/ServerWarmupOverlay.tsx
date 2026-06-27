@@ -111,7 +111,7 @@ export const ServerWarmupOverlay: React.FC<ServerWarmupOverlayProps> = ({ onConn
   };
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-canvas p-6 select-none transition-colors duration-300">
+    <div className="bg-canvas fixed inset-0 z-9999 flex items-center justify-center p-6 transition-colors duration-300 select-none">
       <AnimatePresence mode="wait">
         {status === 'sleeping' ? (
           <motion.div
@@ -135,7 +135,7 @@ export const ServerWarmupOverlay: React.FC<ServerWarmupOverlayProps> = ({ onConn
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="absolute inset-0 rounded-full bg-kindness/20"
+                className="bg-kindness/20 absolute inset-0 rounded-full"
               />
               <motion.div
                 animate={{
@@ -153,22 +153,22 @@ export const ServerWarmupOverlay: React.FC<ServerWarmupOverlayProps> = ({ onConn
             </div>
 
             {/* Title */}
-            <h2 className="text-primary-espresso text-2xl font-bold tracking-tight mb-3">
+            <h2 className="text-primary-espresso mb-3 text-2xl font-bold tracking-tight">
               Initializing Kindness Tracker
             </h2>
 
             {/* Informational copy */}
-            <p className="text-muted-espresso text-sm font-medium mb-6 leading-relaxed max-w-sm">
+            <p className="text-muted-espresso mb-6 max-w-sm text-sm leading-relaxed font-medium">
               {getLoadingMessage()}
             </p>
 
             {/* Indeterminate loading feedback */}
-            <div className="flex flex-col items-center gap-3 w-full">
+            <div className="flex w-full flex-col items-center gap-3">
               {/* Spinner */}
               <div className="border-kindness/20 border-t-kindness h-6 w-6 animate-spin rounded-full border-3" />
-              
+
               {/* Live elapsed timer */}
-              <span className="font-mono text-xs font-semibold text-muted-espresso/80 tracking-wide select-none">
+              <span className="text-muted-espresso/80 font-mono text-xs font-semibold tracking-wide select-none">
                 Elapsed: {elapsed}s / ~30s waking window
               </span>
             </div>
@@ -181,22 +181,25 @@ export const ServerWarmupOverlay: React.FC<ServerWarmupOverlayProps> = ({ onConn
             exit={{ opacity: 0, y: -15 }}
             className="border-muted-espresso/10 bg-surface/40 flex max-w-md flex-col items-center rounded-3xl border p-8 text-center shadow-lg backdrop-blur-md"
           >
-            <div className="bg-red-500/10 text-red-500 mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl">
+            <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-500">
               <AlertCircle className="h-7 w-7" />
             </div>
 
-            <h3 className="text-primary-espresso text-xl font-bold tracking-tight mb-2">
+            <h3 className="text-primary-espresso mb-2 text-xl font-bold tracking-tight">
               Connection Trouble
             </h3>
 
-            <p className="text-muted-espresso text-xs font-medium mb-6 leading-relaxed">
-              We couldn't connect to the backend server. The database might be undergoing maintenance, or you have lost connection to the internet.
+            <p className="text-muted-espresso mb-6 text-xs leading-relaxed font-medium">
+              We couldn't connect to the backend server. The database might be undergoing
+              maintenance, or you have lost connection to the internet.
             </p>
 
             <button
-              onClick={() => { void handleManualRetry(); }}
+              onClick={() => {
+                void handleManualRetry();
+              }}
               disabled={isRetrying}
-              className="bg-kindness hover:bg-kindness/95 active:scale-95 text-white flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl font-bold cursor-pointer transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed select-none"
+              className="bg-kindness hover:bg-kindness/95 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-bold text-white shadow-md transition-all select-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <RefreshCw className={`h-4 w-4 ${isRetrying ? 'animate-spin' : ''}`} />
               <span>{isRetrying ? 'Retrying connection...' : 'Try Reconnecting'}</span>

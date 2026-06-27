@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Sparkles, AlertCircle, HeartHandshake } from 'lucide-react';
-import { FamilyMember, PointsCategory, DESCRIPTION_MAX_LENGTH, resolvePoints } from '@family-kindness/shared';
+import {
+  FamilyMember,
+  PointsCategory,
+  DESCRIPTION_MAX_LENGTH,
+  resolvePoints,
+} from '@family-kindness/shared';
 import { MemberPicker } from './MemberPicker';
 import { KindnessCategoryPicker } from './KindnessCategoryPicker';
 import { CustomPointsPicker } from './CustomPointsPicker';
@@ -19,12 +24,7 @@ interface LogModalProps {
   familyMembers: FamilyMember[];
 }
 
-export const LogModal: React.FC<LogModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  familyMembers,
-}) => {
+export const LogModal: React.FC<LogModalProps> = ({ isOpen, onClose, onSubmit, familyMembers }) => {
   // Input State
   const [submittedBy, setSubmittedBy] = useState<string>('');
   const [beneficiary, setBeneficiary] = useState<string>('');
@@ -53,9 +53,7 @@ export const LogModal: React.FC<LogModalProps> = ({
   }, [isOpen]);
 
   // Filter Beneficiary options to exclude the Submitter
-  const filteredBeneficiaries = familyMembers.filter(
-    (member) => member.id !== submittedBy
-  );
+  const filteredBeneficiaries = familyMembers.filter((member) => member.id !== submittedBy);
 
   // If submitter changes and becomes equal to beneficiary, reset beneficiary
   useEffect(() => {
@@ -68,14 +66,14 @@ export const LogModal: React.FC<LogModalProps> = ({
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     setDescription(val);
-    
+
     if (val.length > DESCRIPTION_MAX_LENGTH) {
-      setValidationError(prev => ({
+      setValidationError((prev) => ({
         ...prev,
-        description: `Exceeded maximum length of ${String(DESCRIPTION_MAX_LENGTH)} characters.`
+        description: `Exceeded maximum length of ${String(DESCRIPTION_MAX_LENGTH)} characters.`,
       }));
     } else {
-      setValidationError(prev => {
+      setValidationError((prev) => {
         const copy = { ...prev };
         delete copy.description;
         return copy;
@@ -112,7 +110,7 @@ export const LogModal: React.FC<LogModalProps> = ({
       pointsAwarded: finalPoints,
       description: description.trim(),
     });
-    
+
     onClose();
   };
 
@@ -120,9 +118,9 @@ export const LogModal: React.FC<LogModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div 
+      <div
         id="modal-overlay"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs overflow-y-auto"
+        className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 p-4 backdrop-blur-xs"
       >
         <motion.div
           id="modal-container"
@@ -130,35 +128,37 @@ export const LogModal: React.FC<LogModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-          className="relative w-full max-w-2xl bg-canvas rounded-3xl border border-muted-espresso/15 shadow-xl overflow-hidden my-8"
+          className="bg-canvas border-muted-espresso/15 relative my-8 w-full max-w-2xl overflow-hidden rounded-3xl border shadow-xl"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-muted-espresso/10 bg-surface/40">
+          <div className="border-muted-espresso/10 bg-surface/40 flex items-center justify-between border-b px-6 py-5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 bg-kindness/10 text-kindness rounded-xl">
-                <HeartHandshake className="w-5 h-5" />
+              <div className="bg-kindness/10 text-kindness rounded-xl p-2">
+                <HeartHandshake className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-primary-espresso leading-tight">
+                <h3 className="text-primary-espresso text-lg leading-tight font-bold">
                   Log a New Act of Kindness
                 </h3>
-                <p className="text-xs text-muted-espresso mt-0.5">
+                <p className="text-muted-espresso mt-0.5 text-xs">
                   Input details of positive actions to fill your family meter.
                 </p>
               </div>
             </div>
-            
+
             <button
               onClick={onClose}
-              className="p-1.5 hover:bg-muted-espresso/10 text-muted-espresso hover:text-primary-espresso rounded-xl transition-all"
+              className="hover:bg-muted-espresso/10 text-muted-espresso hover:text-primary-espresso rounded-xl p-1.5 transition-all"
               type="button"
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
-          <form onSubmit={handleFormSubmit} className="p-6 space-y-6 max-h-[80vh] overflow-y-auto scrollbar-thin">
-            
+          <form
+            onSubmit={handleFormSubmit}
+            className="max-h-[80vh] scrollbar-thin space-y-6 overflow-y-auto p-6"
+          >
             {/* Identity Picker 1: Submitted By */}
             <MemberPicker
               label="Who performed this act? (Submitter)"
@@ -166,7 +166,7 @@ export const LogModal: React.FC<LogModalProps> = ({
               selectedId={submittedBy}
               onSelect={(id) => {
                 setSubmittedBy(id);
-                setValidationError(prev => ({ ...prev, submittedBy: undefined }));
+                setValidationError((prev) => ({ ...prev, submittedBy: undefined }));
               }}
               error={validationError.submittedBy}
             />
@@ -178,11 +178,15 @@ export const LogModal: React.FC<LogModalProps> = ({
               selectedId={beneficiary}
               onSelect={(id) => {
                 setBeneficiary(id);
-                setValidationError(prev => ({ ...prev, beneficiary: undefined }));
+                setValidationError((prev) => ({ ...prev, beneficiary: undefined }));
               }}
               error={validationError.beneficiary}
               gridCols="grid-cols-3 sm:grid-cols-5"
-              placeholder={!submittedBy ? 'Select a submitter above first to choose the beneficiary.' : undefined}
+              placeholder={
+                !submittedBy
+                  ? 'Select a submitter above first to choose the beneficiary.'
+                  : undefined
+              }
             />
 
             {/* Category Selector */}
@@ -191,29 +195,26 @@ export const LogModal: React.FC<LogModalProps> = ({
                 selectedCategory={category}
                 onSelect={(cat) => {
                   setCategory(cat);
-                  setValidationError(prev => ({ ...prev, category: undefined }));
+                  setValidationError((prev) => ({ ...prev, category: undefined }));
                 }}
                 error={validationError.category}
               />
 
               {/* Conditional "Other" custom points selector */}
               {category === 'Other' && (
-                <CustomPointsPicker
-                  selectedPoints={customPoints}
-                  onSelect={setCustomPoints}
-                />
+                <CustomPointsPicker selectedPoints={customPoints} onSelect={setCustomPoints} />
               )}
             </div>
 
             {/* Description Textarea Box */}
             <div className="space-y-2">
-              <div className="flex justify-between items-baseline">
-                <label className="text-sm font-semibold text-primary-espresso">
+              <div className="flex items-baseline justify-between">
+                <label className="text-primary-espresso text-sm font-semibold">
                   What did they do? (Description)
                 </label>
                 {validationError.description && (
-                  <span className="text-xs font-medium text-amber-success flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" /> {validationError.description}
+                  <span className="text-amber-success flex items-center gap-1 text-xs font-medium">
+                    <AlertCircle className="h-3.5 w-3.5" /> {validationError.description}
                   </span>
                 )}
               </div>
@@ -224,7 +225,7 @@ export const LogModal: React.FC<LogModalProps> = ({
                 maxLength={DESCRIPTION_MAX_LENGTH + 20}
                 placeholder="Leo helped Grandma pack some cookies or Grandpa told Mom how much he loves dinner..."
                 rows={3}
-                className={`w-full p-3 rounded-2xl text-sm border bg-surface/10 focus:outline-none focus:ring-1 transition-all ${
+                className={`bg-surface/10 w-full rounded-2xl border p-3 text-sm transition-all focus:ring-1 focus:outline-none ${
                   validationError.description
                     ? 'border-amber-success focus:border-amber-success focus:ring-amber-success'
                     : 'border-muted-espresso/15 focus:border-kindness focus:ring-kindness'
@@ -232,14 +233,12 @@ export const LogModal: React.FC<LogModalProps> = ({
               />
 
               {/* Reactive Character Countdown Indicator */}
-              <div className="flex justify-between items-center text-[11px] px-1">
-                <span className="text-muted-espresso">
-                  Keep details heartfelt but punchy.
-                </span>
-                <span 
+              <div className="flex items-center justify-between px-1 text-[11px]">
+                <span className="text-muted-espresso">Keep details heartfelt but punchy.</span>
+                <span
                   className={`font-mono font-semibold ${
-                    description.length > DESCRIPTION_MAX_LENGTH 
-                      ? 'text-amber-success' 
+                    description.length > DESCRIPTION_MAX_LENGTH
+                      ? 'text-amber-success'
                       : 'text-muted-espresso'
                   }`}
                 >
@@ -250,11 +249,11 @@ export const LogModal: React.FC<LogModalProps> = ({
 
             {/* Error panel overview */}
             {Object.values(validationError).some(Boolean) && (
-              <div className="p-3.5 bg-amber-bg border border-amber-success/20 rounded-2xl flex items-start gap-2.5 text-amber-success">
-                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+              <div className="bg-amber-bg border-amber-success/20 text-amber-success flex items-start gap-2.5 rounded-2xl border p-3.5">
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
                 <div>
-                  <h5 className="font-bold text-xs">Please review your entries:</h5>
-                  <p className="text-[11px] mt-0.5 text-amber-success/90">
+                  <h5 className="text-xs font-bold">Please review your entries:</h5>
+                  <p className="text-amber-success/90 mt-0.5 text-[11px]">
                     Correct the highlighting issues above to log this transaction securely.
                   </p>
                 </div>
@@ -266,19 +265,18 @@ export const LogModal: React.FC<LogModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 py-3 px-4 rounded-2xl text-xs font-semibold border border-muted-espresso/10 hover:bg-surface text-primary-espresso transition-all cursor-pointer"
+                className="border-muted-espresso/10 hover:bg-surface text-primary-espresso flex-1 cursor-pointer rounded-2xl border px-4 py-3 text-xs font-semibold transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-2 py-3 px-4 rounded-2xl text-xs font-bold bg-kindness hover:bg-kindness/90 text-white shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="bg-kindness hover:bg-kindness/90 flex flex-2 cursor-pointer items-center justify-center gap-1.5 rounded-2xl px-4 py-3 text-xs font-bold text-white shadow-sm transition-all hover:shadow-md"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="h-4 w-4" />
                 <span>Submit Kindness Logging</span>
               </button>
             </div>
-
           </form>
         </motion.div>
       </div>

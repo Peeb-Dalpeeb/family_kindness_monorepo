@@ -20,18 +20,18 @@ export const KindnessCategoryPicker: React.FC<KindnessCategoryPickerProps> = ({
 }) => {
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-baseline">
-        <label className="text-sm font-semibold text-primary-espresso">
+      <div className="flex items-baseline justify-between">
+        <label className="text-primary-espresso text-sm font-semibold">
           What kind of kindness is this?
         </label>
         {error && (
-          <span className="text-xs font-medium text-amber-success flex items-center gap-1">
-            <AlertCircle className="w-3.5 h-3.5" /> {error}
+          <span className="text-amber-success flex items-center gap-1 text-xs font-medium">
+            <AlertCircle className="h-3.5 w-3.5" /> {error}
           </span>
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+      <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4">
         {KINDNESS_CATEGORIES.map((cat) => {
           const meta = CATEGORY_METADATA[cat];
           const isSelected = selectedCategory === cat;
@@ -40,16 +40,20 @@ export const KindnessCategoryPicker: React.FC<KindnessCategoryPickerProps> = ({
             <button
               key={cat}
               type="button"
-              onClick={() => { onSelect(cat); }}
-              className={`flex flex-col items-start p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+              onClick={() => {
+                onSelect(cat);
+              }}
+              className={`flex cursor-pointer flex-col items-start rounded-2xl border p-3 text-left transition-all ${
                 isSelected
-                  ? 'border-kindness bg-kindness/5 ring-1 ring-kindness/30'
+                  ? 'border-kindness bg-kindness/5 ring-kindness/30 ring-1'
                   : 'border-muted-espresso/10 hover:border-muted-espresso/20 bg-surface/25'
               }`}
             >
-              <span className="text-sm font-bold text-primary-espresso">{meta.icon} {meta.label}</span>
-              <span className="text-xs text-muted-espresso mt-0.5 leading-tight">{meta.desc}</span>
-              <span className="text-xs font-mono font-bold mt-2 text-kindness bg-kindness-light/40 px-2 py-0.5 rounded-md">
+              <span className="text-primary-espresso text-sm font-bold">
+                {meta.icon} {meta.label}
+              </span>
+              <span className="text-muted-espresso mt-0.5 text-xs leading-tight">{meta.desc}</span>
+              <span className="text-kindness bg-kindness-light/40 mt-2 rounded-md px-2 py-0.5 font-mono text-xs font-bold">
                 {pts !== null ? `+${String(pts)} Pts` : 'Custom Pts'}
               </span>
             </button>

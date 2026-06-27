@@ -18,11 +18,13 @@ export const CustomPointsPicker: React.FC<CustomPointsPickerProps> = ({
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
-      className="bg-surface/50 border border-muted-espresso/10 p-4 rounded-2xl space-y-2 mt-2"
+      className="bg-surface/50 border-muted-espresso/10 mt-2 space-y-2 rounded-2xl border p-4"
     >
-      <div className="flex justify-between items-center">
-        <span className="text-xs font-semibold text-primary-espresso">Select Custom Points Value:</span>
-        <span className="text-xs font-mono font-bold text-kindness bg-kindness/10 px-2.5 py-1 rounded-lg">
+      <div className="flex items-center justify-between">
+        <span className="text-primary-espresso text-xs font-semibold">
+          Select Custom Points Value:
+        </span>
+        <span className="text-kindness bg-kindness/10 rounded-lg px-2.5 py-1 font-mono text-xs font-bold">
           +{String(selectedPoints)} Points
         </span>
       </div>
@@ -34,11 +36,13 @@ export const CustomPointsPicker: React.FC<CustomPointsPickerProps> = ({
             <button
               key={val}
               type="button"
-              onClick={() => { onSelect(val); }}
-              className={`py-2 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
+              onClick={() => {
+                onSelect(val);
+              }}
+              className={`cursor-pointer rounded-xl py-2 text-center text-xs font-bold transition-all ${
                 isActive
                   ? 'bg-kindness text-white'
-                  : 'bg-canvas text-primary-espresso border border-muted-espresso/10 hover:bg-surface'
+                  : 'bg-canvas text-primary-espresso border-muted-espresso/10 hover:bg-surface border'
               }`}
             >
               +{val} Pts

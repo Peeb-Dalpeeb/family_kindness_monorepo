@@ -105,13 +105,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
                 setPinError('');
               }}
               placeholder="••••"
-              className="border-muted-espresso/15 focus:ring-kindness/30 bg-canvas/30 w-full text-center text-2xl font-bold tracking-widest p-3 rounded-xl border focus:outline-none focus:ring-2 focus:border-transparent text-primary-espresso"
+              className="border-muted-espresso/15 focus:ring-kindness/30 bg-canvas/30 text-primary-espresso w-full rounded-xl border p-3 text-center text-2xl font-bold tracking-widest focus:border-transparent focus:ring-2 focus:outline-none"
               autoFocus
               disabled={isVerifying}
             />
 
             {pinError && (
-              <p className="border-red-500/10 text-red-500 bg-red-500/5 text-xs font-medium p-2.5 rounded-lg border">
+              <p className="rounded-lg border border-red-500/10 bg-red-500/5 p-2.5 text-xs font-medium text-red-500">
                 ⚠️ {pinError}
               </p>
             )}
@@ -119,7 +119,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
             <button
               type="submit"
               disabled={isVerifying || pinInput.length !== 4}
-              className="bg-kindness hover:bg-kindness/95 active:scale-98 text-white w-full py-3 rounded-xl font-bold cursor-pointer transition shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-kindness hover:bg-kindness/95 w-full cursor-pointer rounded-xl py-3 font-bold text-white shadow-xs transition active:scale-98 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isVerifying ? 'Verifying...' : 'Verify Passcode'}
             </button>

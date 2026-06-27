@@ -17,7 +17,12 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import { KindnessEntryRefinedSchema, resolvePoints, METER_THRESHOLD, type DashboardMetrics } from '@family-kindness/shared';
+import {
+  KindnessEntryRefinedSchema,
+  resolvePoints,
+  METER_THRESHOLD,
+  type DashboardMetrics,
+} from '@family-kindness/shared';
 import { loginHandler, logoutHandler, authStatusHandler, requireAdmin } from './middleware/auth.js';
 import { loginRateLimiter, writeRateLimiter } from './middleware/rateLimit.js';
 import { UserModel } from './models/User.js';
@@ -130,7 +135,9 @@ async function getHouseholdMetrics(
         totalLogs: 1,
         completedMilestones: 1,
         currentProgressPoints: 1,
-        percentage: { $floor: { $multiply: [{ $divide: ['$currentProgressPoints', METER_THRESHOLD] }, 100] } },
+        percentage: {
+          $floor: { $multiply: [{ $divide: ['$currentProgressPoints', METER_THRESHOLD] }, 100] },
+        },
       },
     },
   ]);

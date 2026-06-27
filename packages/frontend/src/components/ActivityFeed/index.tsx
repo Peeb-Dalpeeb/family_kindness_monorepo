@@ -74,7 +74,9 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                     onUpdate(updatedEntry);
                     setEditingId(null);
                   }}
-                  onCancel={() => { setEditingId(null); }}
+                  onCancel={() => {
+                    setEditingId(null);
+                  }}
                 />
               ) : (
                 <ActivityCardDisplay
@@ -82,7 +84,9 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                   submitter={submitter}
                   beneficiary={beneficiaryInstance}
                   isAdmin={isAdmin}
-                  onStartEdit={() => { setEditingId(entry.id); }}
+                  onStartEdit={() => {
+                    setEditingId(entry.id);
+                  }}
                   onDelete={onDelete}
                 />
               )}

@@ -54,7 +54,7 @@ export const CATEGORY_METADATA: Record<PointsCategory, CategoryMeta> = {
   'Kind Words': { icon: '💬', label: 'Kind Words', desc: 'Compliment or support' },
   'Showing Gratitude': { icon: '🙏', label: 'Gratitude', desc: 'Appreciation gesture' },
   'Helping Hand': { icon: '🤝', label: 'Helping Hand', desc: 'Household chore or aid' },
-  'Other': { icon: '✨', label: 'Other Option', desc: 'Customizable points' },
+  Other: { icon: '✨', label: 'Other Option', desc: 'Customizable points' },
 } as const;
 
 // ── Other Category Point Options ─────────────────────────────
@@ -66,10 +66,7 @@ export const OTHER_POINT_OPTIONS = [5, 10, 15, 20] as const;
 // Min/max across ALL categories (fixed + other). Used by
 // Mongoose schema validators and Zod schemas.
 
-const allPossiblePoints = [
-  ...Object.values(POINTS_MATRIX),
-  ...OTHER_POINT_OPTIONS,
-];
+const allPossiblePoints = [...Object.values(POINTS_MATRIX), ...OTHER_POINT_OPTIONS];
 
 export const MIN_POSSIBLE_POINTS = Math.min(...allPossiblePoints);
 export const MAX_POSSIBLE_POINTS = Math.max(...allPossiblePoints);
@@ -96,10 +93,7 @@ export const DESCRIPTION_MAX_LENGTH = 200;
  *
  * @throws if `requestedPoints` is omitted for the "Other" category.
  */
-export function resolvePoints(
-  category: PointsCategory,
-  requestedPoints?: number,
-): number {
+export function resolvePoints(category: PointsCategory, requestedPoints?: number): number {
   if (category === 'Other') {
     if (requestedPoints === undefined) {
       throw new Error('requestedPoints is required for the "Other" category');

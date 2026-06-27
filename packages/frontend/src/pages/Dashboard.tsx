@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Activity, Plus } from 'lucide-react';
-import { METER_THRESHOLD, type DashboardMetrics, type FamilyMember, type PointsCategory } from '@family-kindness/shared';
+import {
+  METER_THRESHOLD,
+  type DashboardMetrics,
+  type FamilyMember,
+  type PointsCategory,
+} from '@family-kindness/shared';
 import { MilestoneBanner } from '../components/MilestoneBanner';
 import { RadialGauge } from '../components/RadialGauge';
 import { LogModal } from '../components/LogModal';
@@ -63,7 +68,7 @@ export const Dashboard: React.FC = () => {
 
       // Re-fetch metrics and check if milestone was crossed
       const prevMilestones = metrics.completedMilestones;
-      
+
       const metricsResponse = await fetch('/api/meter-status');
       if (metricsResponse.ok) {
         const nextMetrics = (await metricsResponse.json()) as DashboardMetrics;
@@ -85,39 +90,50 @@ export const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in relative pb-16">
+    <div className="animate-fade-in relative space-y-6 pb-16">
       {/* 1. Top-Anchored Milestone Achievement indicator Banner */}
       <MilestoneBanner completedMilestones={metrics.completedMilestones} />
 
       {/* 2. Primary Focal Central Radial progress scale */}
-      <div className="bg-surface/20 border border-muted-espresso/10 rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center relative overflow-hidden shadow-xs">
-        
+      <div className="bg-surface/20 border-muted-espresso/10 relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border p-6 shadow-xs md:p-8">
         {/* Minimal decoration */}
-        <div className="absolute top-4 left-4 flex items-center gap-1.5 text-[10px] bg-canvas px-2 text-muted-espresso border border-muted-espresso/5 py-1 rounded-lg">
-          <Activity className="w-3 h-3 text-kindness" />
+        <div className="bg-canvas text-muted-espresso border-muted-espresso/5 absolute top-4 left-4 flex items-center gap-1.5 rounded-lg border px-2 py-1 text-[10px]">
+          <Activity className="text-kindness h-3 w-3" />
           <span>Weekly House Goal</span>
         </div>
 
         {/* Radial Gauge Dial */}
-        <RadialGauge 
-          percentage={metrics.percentage} 
-          currentPoints={metrics.currentProgressPoints} 
+        <RadialGauge
+          percentage={metrics.percentage}
+          currentPoints={metrics.currentProgressPoints}
           isGlowActive={isRadialGlowActive || metrics.completedMilestones > 0}
         />
 
         {/* Small statistic indicators helping children visually map points */}
-        <div className="grid grid-cols-3 gap-6 max-w-sm w-full mx-auto text-center border-t border-muted-espresso/10 pt-5 mt-2">
+        <div className="border-muted-espresso/10 mx-auto mt-2 grid w-full max-w-sm grid-cols-3 gap-6 border-t pt-5 text-center">
           <div>
-            <span className="block text-[10px] text-muted-espresso uppercase font-bold">Total Points</span>
-            <span className="text-sm font-extrabold text-primary-espresso tabular-nums">{metrics.totalPoints}</span>
+            <span className="text-muted-espresso block text-[10px] font-bold uppercase">
+              Total Points
+            </span>
+            <span className="text-primary-espresso text-sm font-extrabold tabular-nums">
+              {metrics.totalPoints}
+            </span>
           </div>
-          <div className="border-r border-l border-muted-espresso/10">
-            <span className="block text-[10px] text-muted-espresso uppercase font-bold">Next Milestone</span>
-            <span className="text-sm font-extrabold text-kindness tabular-nums">{METER_THRESHOLD} pt</span>
+          <div className="border-muted-espresso/10 border-r border-l">
+            <span className="text-muted-espresso block text-[10px] font-bold uppercase">
+              Next Milestone
+            </span>
+            <span className="text-kindness text-sm font-extrabold tabular-nums">
+              {METER_THRESHOLD} pt
+            </span>
           </div>
           <div>
-            <span className="block text-[10px] text-muted-espresso uppercase font-bold">Logged Acts</span>
-            <span className="text-sm font-extrabold text-primary-espresso tabular-nums">{metrics.totalLogs}</span>
+            <span className="text-muted-espresso block text-[10px] font-bold uppercase">
+              Logged Acts
+            </span>
+            <span className="text-primary-espresso text-sm font-extrabold tabular-nums">
+              {metrics.totalLogs}
+            </span>
           </div>
         </div>
       </div>
@@ -128,23 +144,30 @@ export const Dashboard: React.FC = () => {
           id="open-log-modal"
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => { setIsLogModalOpen(true); }}
-          className="px-8 py-5 rounded-full bg-kindness hover:bg-kindness/95 text-white font-extrabold tracking-wide hover:shadow-lg transition-all flex items-center gap-2.5 cursor-pointer shadow-md select-none border border-kindness/10"
+          onClick={() => {
+            setIsLogModalOpen(true);
+          }}
+          className="bg-kindness hover:bg-kindness/95 border-kindness/10 flex cursor-pointer items-center gap-2.5 rounded-full border px-8 py-5 font-extrabold tracking-wide text-white shadow-md transition-all select-none hover:shadow-lg"
         >
-          <Plus className="w-5 h-5 shrink-0" strokeWidth={3} />
+          <Plus className="h-5 w-5 shrink-0" strokeWidth={3} />
           <span className="text-sm md:text-base">+ Log a New Act of Kindness</span>
         </motion.button>
-        
-        <p className="text-[10px] md:text-xs text-muted-espresso mt-3">
-          Tap anywhere above to open log screen. Best configured on shared kitchen tablets or wall dashboards.
+
+        <p className="text-muted-espresso mt-3 text-[10px] md:text-xs">
+          Tap anywhere above to open log screen. Best configured on shared kitchen tablets or wall
+          dashboards.
         </p>
       </div>
 
       {/* LOG CONTEXT MODAL OVERLAY SHEET */}
       <LogModal
         isOpen={isLogModalOpen}
-        onClose={() => { setIsLogModalOpen(false); }}
-        onSubmit={(entry) => { void handleAddNewEntry(entry); }}
+        onClose={() => {
+          setIsLogModalOpen(false);
+        }}
+        onSubmit={(entry) => {
+          void handleAddNewEntry(entry);
+        }}
         familyMembers={members}
       />
 

@@ -99,7 +99,9 @@ export const ActivityCardDisplay: React.FC<ActivityCardDisplayProps> = ({
         {isAdmin && (
           <div className="flex items-center gap-2">
             <button
-              onClick={() => { onStartEdit(); }}
+              onClick={() => {
+                onStartEdit();
+              }}
               className="bg-canvas hover:bg-kindness-light/30 text-primary-espresso hover:text-kindness border-muted-espresso/10 hover:border-kindness/20 flex cursor-pointer items-center gap-1 rounded-md border px-2 py-1 font-sans font-semibold transition-all"
               title="Edit log details"
             >
@@ -108,7 +110,9 @@ export const ActivityCardDisplay: React.FC<ActivityCardDisplayProps> = ({
             </button>
 
             <button
-              onClick={() => { onDelete(entry.id); }}
+              onClick={() => {
+                onDelete(entry.id);
+              }}
               className="bg-canvas text-muted-espresso border-muted-espresso/10 flex cursor-pointer items-center gap-1 rounded-md border px-2 py-1 font-sans font-semibold transition-all hover:border-red-500/20 hover:bg-red-50 hover:text-red-500"
               title="Delete this act permanently"
             >

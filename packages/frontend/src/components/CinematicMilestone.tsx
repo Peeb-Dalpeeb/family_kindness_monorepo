@@ -14,7 +14,9 @@ export const CinematicMilestone: React.FC<CinematicMilestoneProps> = ({
   onClose,
   milestoneNumber,
 }) => {
-  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; delay: number; color: string; size: number }>>([]);
+  const [particles, setParticles] = useState<
+    Array<{ id: number; x: number; y: number; delay: number; color: string; size: number }>
+  >([]);
 
   // Generate unique falling confetti-like celebratory sparkles on active trigger
   useEffect(() => {
@@ -36,27 +38,27 @@ export const CinematicMilestone: React.FC<CinematicMilestoneProps> = ({
 
   return (
     <AnimatePresence>
-      <div 
+      <div
         id="cinematic-milestone-overlay"
-        className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-primary-espresso/90 backdrop-blur-md overflow-hidden"
+        className="bg-primary-espresso/90 fixed inset-0 z-100 flex items-center justify-center overflow-hidden p-4 backdrop-blur-md"
       >
         {/* Falling Fireworks/Confetti Sparkles */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {particles.map((p) => (
             <motion.div
               key={p.id}
               initial={{ y: -20, x: `${String(p.x)}vw`, opacity: 0, rotate: 0 }}
-              animate={{ 
-                y: '110vh', 
+              animate={{
+                y: '110vh',
                 opacity: [0, 1, 1, 0],
                 rotate: 360,
-                x: `${String(p.x + (Math.random() * 10 - 5))}vw`
+                x: `${String(p.x + (Math.random() * 10 - 5))}vw`,
               }}
-              transition={{ 
-                duration: Math.random() * 3 + 3, 
+              transition={{
+                duration: Math.random() * 3 + 3,
                 delay: p.delay,
                 repeat: Infinity,
-                ease: 'linear'
+                ease: 'linear',
               }}
               style={{
                 position: 'absolute',
@@ -64,7 +66,7 @@ export const CinematicMilestone: React.FC<CinematicMilestoneProps> = ({
                 height: p.size,
                 borderRadius: '50%',
                 backgroundColor: p.color,
-                boxShadow: `0 0 10px ${p.color}`
+                boxShadow: `0 0 10px ${p.color}`,
               }}
             />
           ))}
@@ -76,79 +78,86 @@ export const CinematicMilestone: React.FC<CinematicMilestoneProps> = ({
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ type: 'spring', damping: 15, stiffness: 180 }}
-          className="relative max-w-lg w-full bg-canvas border border-amber-success/30 rounded-[36px] p-6 md:p-8 text-center shadow-2xl overflow-hidden"
+          className="bg-canvas border-amber-success/30 relative w-full max-w-lg overflow-hidden rounded-[36px] border p-6 text-center shadow-2xl md:p-8"
         >
           {/* Internal radiant amber light circle glows */}
-          <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-48 bg-amber-success/20 rounded-full blur-3xl" />
+          <div className="bg-amber-success/20 absolute -top-12 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full blur-3xl" />
 
           <div className="relative space-y-6">
-            
             {/* Animated Big Medal Banner */}
             <div className="flex justify-center">
               <motion.div
-                animate={{ 
+                animate={{
                   scale: [1, 1.12, 1],
-                  rotate: [0, 5, -5, 0]
+                  rotate: [0, 5, -5, 0],
                 }}
-                transition={{ 
-                  duration: 2.5, 
+                transition={{
+                  duration: 2.5,
                   repeat: Infinity,
-                  ease: 'easeInOut'
+                  ease: 'easeInOut',
                 }}
-                className="p-5 rounded-full bg-amber-success/15 border border-amber-success/40 text-amber-success relative inline-block"
+                className="bg-amber-success/15 border-amber-success/40 text-amber-success relative inline-block rounded-full border p-5"
               >
-                <Award className="w-16 h-16" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-                  <Star className="w-5 h-5 text-amber-500 fill-amber-500 animate-pulse" />
+                <Award className="h-16 w-16" />
+                <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                  <Star className="h-5 w-5 animate-pulse fill-amber-500 text-amber-500" />
                 </div>
               </motion.div>
             </div>
 
             {/* Sparkles Floating Around Title */}
             <div className="space-y-2">
-              <span className="text-xs uppercase font-mono tracking-widest font-bold text-amber-success bg-amber-success/10 px-3.5 py-1.5 rounded-full">
+              <span className="text-amber-success bg-amber-success/10 rounded-full px-3.5 py-1.5 font-mono text-xs font-bold tracking-widest uppercase">
                 ★ House milestone achieved ★
               </span>
-              
-              <h2 className="text-3xl md:text-4xl font-extrabold text-primary-espresso tracking-tight leading-tight mt-3">
+
+              <h2 className="text-primary-espresso mt-3 text-3xl leading-tight font-extrabold tracking-tight md:text-4xl">
                 Kindness Meter Overflow!
               </h2>
 
-              <p className="text-sm text-muted-espresso font-sans max-w-sm mx-auto mt-2 leading-relaxed">
-                Thank you, family! Every kind word, warm gesture, and helping hand filled our heart tracker once more!
+              <p className="text-muted-espresso mx-auto mt-2 max-w-sm font-sans text-sm leading-relaxed">
+                Thank you, family! Every kind word, warm gesture, and helping hand filled our heart
+                tracker once more!
               </p>
             </div>
 
             {/* Verification Statistics and Badge Tally info */}
-            <div className="bg-surface/60 border border-muted-espresso/10 p-5 rounded-2xl md:rounded-3xl max-w-sm mx-auto flex items-center justify-around gap-4 shadow-xs">
+            <div className="bg-surface/60 border-muted-espresso/10 mx-auto flex max-w-sm items-center justify-around gap-4 rounded-2xl border p-5 shadow-xs md:rounded-3xl">
               <div className="text-center">
-                <span className="block text-[10px] text-muted-espresso uppercase font-bold tracking-wider">Milestone Tally</span>
-                <span className="text-2xl font-black text-amber-success font-mono">{milestoneNumber}x Filled</span>
+                <span className="text-muted-espresso block text-[10px] font-bold tracking-wider uppercase">
+                  Milestone Tally
+                </span>
+                <span className="text-amber-success font-mono text-2xl font-black">
+                  {milestoneNumber}x Filled
+                </span>
               </div>
-              <div className="h-8 w-px bg-muted-espresso/15" />
+              <div className="bg-muted-espresso/15 h-8 w-px" />
               <div className="text-center">
-                <span className="block text-[10px] text-muted-espresso uppercase font-bold tracking-wider">Total Contribution</span>
-                <span className="text-2xl font-black text-primary-espresso font-mono">{(milestoneNumber * METER_THRESHOLD).toLocaleString()} pts</span>
+                <span className="text-muted-espresso block text-[10px] font-bold tracking-wider uppercase">
+                  Total Contribution
+                </span>
+                <span className="text-primary-espresso font-mono text-2xl font-black">
+                  {(milestoneNumber * METER_THRESHOLD).toLocaleString()} pts
+                </span>
               </div>
             </div>
 
             {/* Celebratory heart-warming greeting */}
-            <p className="text-xs text-kindness font-semibold flex items-center justify-center gap-1.5">
-              <Heart className="w-4 h-4 fill-kindness text-kindness animate-pulse" />
+            <p className="text-kindness flex items-center justify-center gap-1.5 text-xs font-semibold">
+              <Heart className="fill-kindness text-kindness h-4 w-4 animate-pulse" />
               <span>Great job! A special treat or fun family outing is in order!</span>
-              <Sparkles className="w-4 h-4 text-amber-500" />
+              <Sparkles className="h-4 w-4 text-amber-500" />
             </p>
 
             {/* Action button to return back to dashboard */}
             <button
               onClick={onClose}
-              className="w-full py-4.5 bg-amber-success hover:bg-amber-600 text-white font-bold rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer mt-4"
+              className="bg-amber-success mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl py-4.5 font-bold text-white shadow-md transition-all hover:bg-amber-600 hover:shadow-lg"
               type="button"
             >
               <span>Keep Spreading Kindness!</span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="h-4 w-4" />
             </button>
-
           </div>
         </motion.div>
       </div>

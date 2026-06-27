@@ -31,7 +31,9 @@ function AppContent() {
 
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => { controller.abort(); }, 5000); // 5s timeout on health ping
+        const timeoutId = setTimeout(() => {
+          controller.abort();
+        }, 5000); // 5s timeout on health ping
 
         const res = await fetch('/api/health', { signal: controller.signal });
         clearTimeout(timeoutId);
@@ -92,7 +94,7 @@ function AppContent() {
   return (
     <div className="bg-canvas text-primary-espresso min-h-screen px-4 py-10 transition-colors duration-300">
       {/* Header */}
-      <header className="border-muted-espresso/10 mx-auto mb-10 flex flex-col md:flex-row items-center justify-between gap-4 border-b pb-5 max-w-4xl">
+      <header className="border-muted-espresso/10 mx-auto mb-10 flex max-w-4xl flex-col items-center justify-between gap-4 border-b pb-5 md:flex-row">
         <div className="flex items-center gap-3">
           <div className="bg-kindness flex h-10 w-10 items-center justify-center rounded-2xl text-white shadow-sm">
             <Heart className="h-5 w-5 fill-white" />
@@ -102,22 +104,22 @@ function AppContent() {
               <h1 className="text-xl font-bold tracking-tight md:text-2xl">
                 Family Kindness Tracker
               </h1>
-              
+
               {/* Connection Badges */}
               {connectionStatus === 'connected' && (
-                <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/15 select-none">
+                <span className="flex items-center gap-1 rounded-full border border-emerald-500/15 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-600 select-none dark:text-emerald-400">
                   <span className="h-1 w-1 rounded-full bg-emerald-500" />
                   Connected
                 </span>
               )}
               {connectionStatus === 'sleeping' && (
-                <span className="flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[9px] font-bold text-amber-600 dark:text-amber-400 border border-amber-500/15 animate-pulse select-none">
+                <span className="flex animate-pulse items-center gap-1 rounded-full border border-amber-500/15 bg-amber-500/10 px-2 py-0.5 text-[9px] font-bold text-amber-600 select-none dark:text-amber-400">
                   <Loader2 className="h-2.5 w-2.5 animate-spin text-amber-500" />
                   Server Sleeping
                 </span>
               )}
               {connectionStatus === 'offline' && (
-                <span className="flex items-center gap-1 rounded-full bg-red-500/10 px-2 py-0.5 text-[9px] font-bold text-red-600 dark:text-red-400 border border-red-500/15 select-none">
+                <span className="flex items-center gap-1 rounded-full border border-red-500/15 bg-red-500/10 px-2 py-0.5 text-[9px] font-bold text-red-600 select-none dark:text-red-400">
                   <WifiOff className="h-2.5 w-2.5 text-red-500" />
                   Offline
                 </span>
@@ -129,10 +131,12 @@ function AppContent() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Theme Switcher */}
           <button
-            onClick={() => { setThemeMode(themeMode === 'light' ? 'dark' : 'light'); }}
+            onClick={() => {
+              setThemeMode(themeMode === 'light' ? 'dark' : 'light');
+            }}
             className="border-muted-espresso/10 text-muted-espresso hover:bg-surface hover:text-primary-espresso cursor-pointer rounded-xl border p-2.5 transition-all"
             title="Toggle theme mode"
           >
@@ -144,28 +148,28 @@ function AppContent() {
           </button>
 
           {/* Navigation Controls */}
-          <div className="bg-surface/50 p-1 rounded-2xl border border-muted-espresso/10 flex items-center gap-1">
+          <div className="bg-surface/50 border-muted-espresso/10 flex items-center gap-1 rounded-2xl border p-1">
             <Link
               to="/dashboard"
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
+              className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold tracking-wide transition-all ${
                 isActive('/dashboard')
-                  ? 'bg-canvas text-kindness shadow-xs ring-1 ring-kindness/5'
+                  ? 'bg-canvas text-kindness ring-kindness/5 shadow-xs ring-1'
                   : 'text-muted-espresso hover:text-primary-espresso'
               }`}
             >
-              <Home className="w-3.5 h-3.5" />
+              <Home className="h-3.5 w-3.5" />
               <span>Dashboard</span>
             </Link>
-            
+
             <Link
               to="/admin"
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
+              className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold tracking-wide transition-all ${
                 isActive('/admin')
-                  ? 'bg-canvas text-kindness shadow-xs ring-1 ring-kindness/5'
+                  ? 'bg-canvas text-kindness ring-kindness/5 shadow-xs ring-1'
                   : 'text-muted-espresso hover:text-primary-espresso'
               }`}
             >
-              <Lock className="w-3.5 h-3.5" />
+              <Lock className="h-3.5 w-3.5" />
               <span>Parent Hub</span>
             </Link>
           </div>
@@ -176,13 +180,13 @@ function AppContent() {
       <main className="mx-auto max-w-4xl">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={
               <ProtectedRoute>
                 <Admin />
               </ProtectedRoute>
-            } 
+            }
           />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -190,9 +194,11 @@ function AppContent() {
       </main>
 
       {/* Footer */}
-      <footer className="border-muted-espresso/10 text-muted-espresso/70 mx-auto mt-12 max-w-4xl border-t py-8 text-center text-[11px] select-none space-y-1">
+      <footer className="border-muted-espresso/10 text-muted-espresso/70 mx-auto mt-12 max-w-4xl space-y-1 border-t py-8 text-center text-[11px] select-none">
         <p>© 2026 Family Kindness Tracker — MERN Monorepo v{import.meta.env.VITE_APP_VERSION}</p>
-        <p className="font-mono text-[10px]">Deployed Mode Node Ingress Injected • Port Localhost</p>
+        <p className="font-mono text-[10px]">
+          Deployed Mode Node Ingress Injected • Port Localhost
+        </p>
       </footer>
     </div>
   );
