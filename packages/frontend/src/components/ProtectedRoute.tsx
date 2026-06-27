@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Lock } from 'lucide-react';
 import { motion } from 'motion/react';
+import { apiFetch } from '../lib/api';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,18 +19,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, []);
 
   const checkAuthStatus = async () => {
-    try {
-      const response = await fetch('/api/auth/status');
-      if (response.ok) {
-        const data = (await response.json()) as { authenticated: boolean };
-        setIsAuthenticated(data.authenticated);
-      } else {
-        setIsAuthenticated(false);
-      }
-    } catch (error) {
-      console.error('Failed to check authentication status:', error);
-      setIsAuthenticated(false);
-    }
+    const data = await apiFetch<{ authenticated: boolean }>('/api/auth/status');
+    setIsAuthenticated(data?.authenticated ?? false);
   };
 
   const handleAuthSubmit = async (e: React.SyntheticEvent) => {

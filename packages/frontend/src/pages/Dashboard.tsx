@@ -6,6 +6,7 @@ import { MilestoneBanner } from '../components/MilestoneBanner';
 import { RadialGauge } from '../components/RadialGauge';
 import { LogModal } from '../components/LogModal';
 import { CinematicMilestone } from '../components/CinematicMilestone';
+import { apiFetch } from '../lib/api';
 
 export const Dashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<DashboardMetrics>({
@@ -29,27 +30,13 @@ export const Dashboard: React.FC = () => {
   }, []);
 
   const fetchMetrics = async () => {
-    try {
-      const response = await fetch('/api/meter-status');
-      if (response.ok) {
-        const data = (await response.json()) as DashboardMetrics;
-        setMetrics(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch dashboard metrics:', error);
-    }
+    const data = await apiFetch<DashboardMetrics>('/api/meter-status');
+    if (data) setMetrics(data);
   };
 
   const fetchMembers = async () => {
-    try {
-      const response = await fetch('/api/users');
-      if (response.ok) {
-        const data = (await response.json()) as FamilyMember[];
-        setMembers(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch family members:', error);
-    }
+    const data = await apiFetch<FamilyMember[]>('/api/users');
+    if (data) setMembers(data);
   };
 
   const handleAddNewEntry = async (newEntryData: {

@@ -69,7 +69,7 @@ The system relies on a strictly typed data ingest schema to maintain referential
 ### **Ingestion Validation Rules**
 
   * **Predefined Selectors:** "SubmittedBy", "Beneficiary", and "Category" fields must map strictly to pre-populated system values. Raw text inputs are completely blocked for these properties.
-  * **Data Restrictions:** If a User's system role is Standard (Child), the application blocks any payload where SubmittedBy is identical to the Beneficiary.
+  * **Data Restrictions:** The application blocks any payload where SubmittedBy is identical to the Beneficiary. This rule is enforced universally for every submission, regardless of the submitting user's role (the validation schema has no awareness of role).
 
 ## **5. Server-Side Business Logic & Calculations**
 

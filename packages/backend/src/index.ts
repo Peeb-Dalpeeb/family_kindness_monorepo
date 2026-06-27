@@ -19,6 +19,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { KindnessEntryRefinedSchema, resolvePoints, METER_THRESHOLD, type DashboardMetrics } from '@family-kindness/shared';
 import { loginHandler, logoutHandler, authStatusHandler, requireAdmin } from './middleware/auth.js';
+import { loginRateLimiter, writeRateLimiter } from './middleware/rateLimit.js';
 import { UserModel } from './models/User.js';
 import { KindnessEntryModel } from './models/KindnessEntry.js';
 import packageJson from '../package.json' with { type: 'json' };
@@ -161,7 +162,6 @@ app.use(cookieParser());
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     version: packageJson.version,
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
@@ -174,7 +174,7 @@ app.get('/api/health', (_req, res) => {
 app.get(
   '/api/users',
   asyncHandler(async (_req, res) => {
-    const users = await UserModel.find();
+    const users = await UserModel.find().lean();
     const mappedUsers = users.map((u) => ({
       id: u._id.toString(),
       name: u.name,
@@ -200,6 +200,7 @@ app.get(
 // POST /api/logs — Public kindness log submission
 app.post(
   '/api/logs',
+  writeRateLimiter,
   asyncHandler(async (req, res) => {
     const parsed = KindnessEntryRefinedSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -259,7 +260,7 @@ app.post(
 
 // ── Authentication Routes ────────────────────────────────────
 
-app.post('/api/auth/login', loginHandler);
+app.post('/api/auth/login', loginRateLimiter, loginHandler);
 app.post('/api/auth/logout', logoutHandler);
 app.get('/api/auth/status', authStatusHandler);
 
@@ -269,7 +270,7 @@ app.get(
   '/api/admin/logs',
   requireAdmin,
   asyncHandler(async (_req, res) => {
-    const entries = await KindnessEntryModel.find().sort({ timestamp: -1 });
+    const entries = await KindnessEntryModel.find().sort({ timestamp: -1 }).lean();
     const mappedEntries = entries.map((entry) => ({
       id: entry._id.toString(),
       submittedBy: entry.submittedBy.toString(),
@@ -378,12 +379,10 @@ app.delete(
 // ── Global Error Handler Middleware ───────────────────────────
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('[backend] ✗ Global error caught:', err);
-  const errorMessage = err instanceof Error ? err.message : String(err);
 
   res.status(500).json({
     success: false,
     message: 'Internal Server Error',
-    error: errorMessage,
   });
 });
 

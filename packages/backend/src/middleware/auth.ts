@@ -53,8 +53,8 @@ function getJwtExpirySeconds(): number {
 
 function getAdminPin(): string {
   const pin = process.env['ADMIN_PIN'];
-  if (!pin) {
-    throw new Error('[auth] ADMIN_PIN is not configured in environment variables.');
+  if (!pin || pin === '1234') {
+    throw new Error('[auth] ADMIN_PIN is not configured (or still the example default 1234).');
   }
   return pin;
 }

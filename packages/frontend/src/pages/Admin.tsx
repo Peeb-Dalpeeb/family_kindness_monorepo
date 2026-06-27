@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldAlert } from 'lucide-react';
 import { type KindnessEntry, type FamilyMember, type DashboardMetrics } from '@family-kindness/shared';
 import { ActivityFeed } from '../components/ActivityFeed';
+import { apiFetch } from '../lib/api';
 
 export const Admin: React.FC = () => {
   const [entries, setEntries] = useState<KindnessEntry[]>([]);
@@ -20,23 +21,16 @@ export const Admin: React.FC = () => {
   }, []);
 
   const fetchLogsAndData = async () => {
-    try {
-      const [logsRes, membersRes, metricsRes] = await Promise.all([
-        fetch('/api/admin/logs'),
-        fetch('/api/users'),
-        fetch('/api/meter-status'),
-      ]);
+    const [logs, users, stats] = await Promise.all([
+      apiFetch<KindnessEntry[]>('/api/admin/logs'),
+      apiFetch<FamilyMember[]>('/api/users'),
+      apiFetch<DashboardMetrics>('/api/meter-status'),
+    ]);
 
-      if (logsRes.ok && membersRes.ok && metricsRes.ok) {
-        const logs = (await logsRes.json()) as KindnessEntry[];
-        const users = (await membersRes.json()) as FamilyMember[];
-        const stats = (await metricsRes.json()) as DashboardMetrics;
-        setEntries(logs);
-        setMembers(users);
-        setMetrics(stats);
-      }
-    } catch (error) {
-      console.error('Failed to load admin panel data:', error);
+    if (logs && users && stats) {
+      setEntries(logs);
+      setMembers(users);
+      setMetrics(stats);
     }
   };
 
@@ -89,6 +83,17 @@ export const Admin: React.FC = () => {
     }
   };
 
+  const memberCounts = entries.reduce<Record<string, { given: number; recv: number }>>(
+    (acc, entry) => {
+      acc[entry.submittedBy] ??= { given: 0, recv: 0 };
+      acc[entry.submittedBy].given += 1;
+      acc[entry.beneficiary] ??= { given: 0, recv: 0 };
+      acc[entry.beneficiary].recv += 1;
+      return acc;
+    },
+    {},
+  );
+
   return (
     <div className="space-y-6 animate-fade-in pb-16">
       {/* Admin Header with info */}
@@ -132,8 +137,9 @@ export const Admin: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
           {members.map((m) => {
-            const submitCount = entries.filter((e) => e.submittedBy === m.id).length;
-            const beneficiaryCount = entries.filter((e) => e.beneficiary === m.id).length;
+            const counts = memberCounts[m.id] ?? { given: 0, recv: 0 };
+            const submitCount = counts.given;
+            const beneficiaryCount = counts.recv;
             return (
               <div 
                 key={m.id} 
