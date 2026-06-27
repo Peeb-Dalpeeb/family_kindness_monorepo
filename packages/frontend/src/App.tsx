@@ -191,7 +191,7 @@ function AppContent() {
 
       {/* Footer */}
       <footer className="border-muted-espresso/10 text-muted-espresso/70 mx-auto mt-12 max-w-4xl border-t py-8 text-center text-[11px] select-none space-y-1">
-        <p>© 2026 Family Kindness Tracker — MERN Monorepo v1.0.0</p>
+        <p>© 2026 Family Kindness Tracker — MERN Monorepo v{import.meta.env.VITE_APP_VERSION}</p>
         <p className="font-mono text-[10px]">Deployed Mode Node Ingress Injected • Port Localhost</p>
       </footer>
     </div>

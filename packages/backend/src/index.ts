@@ -21,6 +21,7 @@ import { KindnessEntryRefinedSchema, resolvePoints, METER_THRESHOLD, type Dashbo
 import { loginHandler, logoutHandler, authStatusHandler, requireAdmin } from './middleware/auth.js';
 import { UserModel } from './models/User.js';
 import { KindnessEntryModel } from './models/KindnessEntry.js';
+import packageJson from '../package.json' with { type: 'json' };
 
 // ── Express Async Handler Wrapper ────────────────────────────
 
@@ -160,6 +161,8 @@ app.use(cookieParser());
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    version: packageJson.version,
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
