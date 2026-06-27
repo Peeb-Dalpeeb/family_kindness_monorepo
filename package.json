@@ -23,8 +23,11 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "pretest": "npm run build",
     "test": "vitest run",
+    "pretest:watch": "npm run build",
     "test:watch": "vitest",
+    "pretest:coverage": "npm run build",
     "test:coverage": "vitest run --coverage",
     "clean": "node -e \"const cp = require('child_process'); cp.execSync('tsc --build --clean', {stdio: 'inherit'}); cp.execSync('rimraf packages/backend/dist packages/frontend/dist packages/shared/dist', {stdio: 'inherit'});\"",
     "typecheck": "tsc --build"
