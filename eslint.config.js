@@ -33,13 +33,24 @@ export default tseslint.config(
     },
   },
 
+  // ── Test Files: Disable Type-Checked Rules ─────────────────
+  // Test files are excluded from each package's build tsconfig
+  // (see tsconfig.json "exclude") so they aren't part of the
+  // type-aware project service.
+  {
+    files: ['**/__tests__/**/*.ts'],
+    ...tseslint.configs.disableTypeChecked,
+  },
+
   // ── Global Ignores ─────────────────────────────────────────
   {
     ignores: [
       '**/dist/**',
       '**/build/**',
       '**/node_modules/**',
+      'coverage/**',
       'eslint.config.js',
+      'vitest.config.ts',
       '**/vite.config.ts',
     ],
   },
