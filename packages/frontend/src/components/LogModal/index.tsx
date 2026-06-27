@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Sparkles, AlertCircle, HeartHandshake } from 'lucide-react';
 import { FamilyMember, PointsCategory } from '@family-kindness/shared';
+import { MemberPicker } from './MemberPicker';
+import { KindnessCategoryPicker } from './KindnessCategoryPicker';
+import { CustomPointsPicker } from './CustomPointsPicker';
 
 interface LogModalProps {
   isOpen: boolean;
@@ -161,178 +164,48 @@ export const LogModal: React.FC<LogModalProps> = ({
           <form onSubmit={handleFormSubmit} className="p-6 space-y-6 max-h-[80vh] overflow-y-auto scrollbar-thin">
             
             {/* Identity Picker 1: Submitted By */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-baseline">
-                <label className="text-sm font-semibold text-primary-espresso flex items-center gap-1.5">
-                  <span>Who performed this act? (Submitter)</span>
-                </label>
-                {validationError.submittedBy && (
-                  <span className="text-xs font-medium text-amber-success flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" /> {validationError.submittedBy}
-                  </span>
-                )}
-              </div>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {familyMembers.map((member) => {
-                  const isSelected = submittedBy === member.id;
-                  return (
-                    <button
-                      key={member.id}
-                      type="button"
-                      onClick={() => {
-                        setSubmittedBy(member.id);
-                        setValidationError(prev => ({ ...prev, submittedBy: undefined }));
-                      }}
-                      className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-kindness bg-kindness/5 scale-102 ring-1 ring-kindness/30'
-                          : 'border-muted-espresso/10 hover:border-muted-espresso/20 bg-surface/25'
-                      }`}
-                    >
-                      {member.avatar && (member.avatar.includes('.') || member.avatar.startsWith('/')) ? (
-                        <img src={member.avatar} alt={member.name} className="w-8 h-8 rounded-full object-cover mb-1 select-none" />
-                      ) : (
-                        <span className="text-2xl mb-1">{member.avatar}</span>
-                      )}
-                      <span className="text-xs font-semibold text-primary-espresso truncate w-full">
-                        {member.name.split(' ')[0]}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <MemberPicker
+              label="Who performed this act? (Submitter)"
+              members={familyMembers}
+              selectedId={submittedBy}
+              onSelect={(id) => {
+                setSubmittedBy(id);
+                setValidationError(prev => ({ ...prev, submittedBy: undefined }));
+              }}
+              error={validationError.submittedBy}
+            />
 
             {/* Identity Picker 2: Beneficiary */}
+            <MemberPicker
+              label="Who was this act for? (Beneficiary)"
+              members={filteredBeneficiaries}
+              selectedId={beneficiary}
+              onSelect={(id) => {
+                setBeneficiary(id);
+                setValidationError(prev => ({ ...prev, beneficiary: undefined }));
+              }}
+              error={validationError.beneficiary}
+              gridCols="grid-cols-3 sm:grid-cols-5"
+              placeholder={!submittedBy ? 'Select a submitter above first to choose the beneficiary.' : undefined}
+            />
+
+            {/* Category Selector */}
             <div className="space-y-2">
-              <div className="flex justify-between items-baseline">
-                <label className="text-sm font-semibold text-primary-espresso flex items-center gap-1.5">
-                  <span>Who was this act for? (Beneficiary)</span>
-                </label>
-                {validationError.beneficiary && (
-                  <span className="text-xs font-medium text-amber-success flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" /> {validationError.beneficiary}
-                  </span>
-                )}
-              </div>
-
-              {!submittedBy ? (
-                <div className="border border-dashed border-muted-espresso/15 rounded-2xl p-4 text-center text-xs text-muted-espresso bg-surface/20">
-                  Select a submitter above first to choose the beneficiary.
-                </div>
-              ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                  {filteredBeneficiaries.map((member) => {
-                    const isSelected = beneficiary === member.id;
-                    return (
-                      <button
-                        key={member.id}
-                        type="button"
-                        onClick={() => {
-                          setBeneficiary(member.id);
-                          setValidationError(prev => ({ ...prev, beneficiary: undefined }));
-                        }}
-                        className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all cursor-pointer ${
-                          isSelected
-                            ? 'border-kindness bg-kindness/5 scale-102 ring-1 ring-kindness/30'
-                            : 'border-muted-espresso/10 hover:border-muted-espresso/20 bg-surface/25'
-                        }`}
-                      >
-                        {member.avatar && (member.avatar.includes('.') || member.avatar.startsWith('/')) ? (
-                          <img src={member.avatar} alt={member.name} className="w-8 h-8 rounded-full object-cover mb-1 select-none" />
-                        ) : (
-                          <span className="text-2xl mb-1">{member.avatar}</span>
-                        )}
-                        <span className="text-xs font-semibold text-primary-espresso truncate w-full">
-                          {member.name.split(' ')[0]}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Category Selector Grid of Pills */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-baseline">
-                <label className="text-sm font-semibold text-primary-espresso">
-                  What kind of kindness is this?
-                </label>
-                {validationError.category && (
-                  <span className="text-xs font-medium text-amber-success flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" /> {validationError.category}
-                  </span>
-                )}
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                {[
-                  { cat: 'Kind Words' as const, pts: 10, label: '💬 Kind Words', desc: 'Compliment or support' },
-                  { cat: 'Showing Gratitude' as const, pts: 15, label: '🙏 Gratitude', desc: 'Appreciation gesture' },
-                  { cat: 'Helping Hand' as const, pts: 20, label: '🤝 Helping Hand', desc: 'Household chore or aid' },
-                  { cat: 'Other' as const, pts: null, label: '✨ Other Option', desc: 'Customizable points' },
-                ].map((item) => {
-                  const isSelected = category === item.cat;
-                  return (
-                    <button
-                      key={item.cat}
-                      type="button"
-                      onClick={() => {
-                        setCategory(item.cat);
-                        setValidationError(prev => ({ ...prev, category: undefined }));
-                      }}
-                      className={`flex flex-col items-start p-3 rounded-2xl border text-left transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-kindness bg-kindness/5 ring-1 ring-kindness/30'
-                          : 'border-muted-espresso/10 hover:border-muted-espresso/20 bg-surface/25'
-                      }`}
-                    >
-                      <span className="text-sm font-bold text-primary-espresso">{item.label}</span>
-                      <span className="text-xs text-muted-espresso mt-0.5 leading-tight">{item.desc}</span>
-                      <span className="text-xs font-mono font-bold mt-2 text-kindness bg-kindness-light/40 px-2 py-0.5 rounded-md">
-                        {item.pts !== null ? `+${String(item.pts)} Pts` : 'Custom Pts'}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+              <KindnessCategoryPicker
+                selectedCategory={category}
+                onSelect={(cat) => {
+                  setCategory(cat);
+                  setValidationError(prev => ({ ...prev, category: undefined }));
+                }}
+                error={validationError.category}
+              />
 
               {/* Conditional "Other" custom points selector */}
               {category === 'Other' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="bg-surface/50 border border-muted-espresso/10 p-4 rounded-2xl space-y-2 mt-2"
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-semibold text-primary-espresso">Select Custom Points Value:</span>
-                    <span className="text-xs font-mono font-bold text-kindness bg-kindness/10 px-2.5 py-1 rounded-lg">
-                      +{String(customPoints)} Points
-                    </span>
-                  </div>
-                  
-                  <div className="grid grid-cols-4 gap-2">
-                    {[5, 10, 15, 20].map((val) => {
-                      const isActive = customPoints === val;
-                      return (
-                        <button
-                          key={val}
-                          type="button"
-                          onClick={() => { setCustomPoints(val); }}
-                          className={`py-2 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
-                            isActive
-                              ? 'bg-kindness text-white'
-                              : 'bg-canvas text-primary-espresso border border-muted-espresso/10 hover:bg-surface'
-                          }`}
-                        >
-                          +{val} Pts
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
+                <CustomPointsPicker
+                  selectedPoints={customPoints}
+                  onSelect={setCustomPoints}
+                />
               )}
             </div>
 
