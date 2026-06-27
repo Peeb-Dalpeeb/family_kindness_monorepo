@@ -1,4 +1,5 @@
 import React from 'react';
+import { METER_THRESHOLD } from '@family-kindness/shared';
 
 interface MilestoneBannerProps {
   completedMilestones: number;
@@ -12,10 +13,10 @@ export const MilestoneBanner: React.FC<MilestoneBannerProps> = ({ completedMiles
         className="w-full bg-surface/30 border border-muted-espresso/5 rounded-2xl px-4 py-3 flex items-center justify-between gap-4"
       >
         <p className="text-xs text-muted-espresso font-medium font-sans">
-          Let's spread positivity to fill our progress meter towards our goal of 1,000 points.
+          Let's spread positivity to fill our progress meter towards our goal of {METER_THRESHOLD.toLocaleString()} points.
         </p>
         <span className="text-[10px] uppercase font-mono font-bold text-muted-espresso tracking-wider shrink-0 bg-surface px-2 py-1 rounded">
-          Goal: 1k pts
+          Goal: {METER_THRESHOLD.toLocaleString()} pts
         </span>
       </div>
     );

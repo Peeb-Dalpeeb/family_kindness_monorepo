@@ -5,6 +5,12 @@
  * the frontend, backend API, and MongoDB persistence layer.
  */
 
+import type { PointsCategory } from './constants.js';
+
+// Re-export so existing consumers of `PointsCategory` from
+// `@family-kindness/shared` continue to work unchanged.
+export type { PointsCategory } from './constants.js';
+
 // ── User / Family Member ─────────────────────────────────────
 
 export type UserRole = 'admin' | 'standard';
@@ -25,10 +31,6 @@ export interface FamilyMember {
   /** Authorization tier: admin (parents) or standard (children). */
   role: UserRole;
 }
-
-// ── Kindness Categories & Points ─────────────────────────────
-
-export type PointsCategory = 'Kind Words' | 'Showing Gratitude' | 'Helping Hand' | 'Other';
 
 // ── Kindness Log Entry ───────────────────────────────────────
 
@@ -51,7 +53,7 @@ export interface KindnessEntry {
   /** Integer points calculated on submission. */
   pointsAwarded: number;
 
-  /** Free-text description. Strict 200-character maximum. */
+  /** Free-text description. Max length defined by DESCRIPTION_MAX_LENGTH. */
   description: string;
 }
 
@@ -61,13 +63,13 @@ export interface DashboardMetrics {
   /** Grand running total of all points ever earned. */
   totalPoints: number;
 
-  /** Floor(totalPoints / 1000) — how many times the meter was filled. */
+  /** Floor(totalPoints / METER_THRESHOLD) — how many times the meter was filled. */
   completedMilestones: number;
 
-  /** Remainder points since last 1,000-point milestone. */
+  /** Remainder points since last METER_THRESHOLD-point milestone. */
   currentProgressPoints: number;
 
-  /** Floor((currentProgressPoints / 1000) * 100) — 0% to 99%. */
+  /** Floor((currentProgressPoints / METER_THRESHOLD) * 100) — 0% to 99%. */
   percentage: number;
 
   /** Total number of kindness log entries in the system. */

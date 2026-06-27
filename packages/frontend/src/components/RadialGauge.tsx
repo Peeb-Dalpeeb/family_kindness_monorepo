@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { METER_THRESHOLD } from '@family-kindness/shared';
 
 interface RadialGaugeProps {
   percentage: number;
@@ -93,14 +94,14 @@ export const RadialGauge: React.FC<RadialGaugeProps> = ({
           </div>
 
           <span className="text-[10px] md:text-xs font-mono font-medium text-muted-espresso uppercase tracking-widest mt-2">
-            {currentPoints} / 1,000 Points
+            {currentPoints} / {METER_THRESHOLD.toLocaleString()} Points
           </span>
 
           <div className="w-3/4 border-t border-muted-espresso/10 my-2.5" />
 
           {/* Subtext readout EXACTLY as specified in guidelines */}
           <p className="text-[11px] md:text-xs text-muted-espresso leading-normal max-w-[170px] font-medium font-sans">
-            Filled toward our 1,000 pt milestone.
+            Filled toward our {METER_THRESHOLD.toLocaleString()} pt milestone.
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Award, Sparkles, Heart, ChevronRight, Star } from 'lucide-react';
+import { METER_THRESHOLD } from '@family-kindness/shared';
 
 interface CinematicMilestoneProps {
   isOpen: boolean;
@@ -127,7 +128,7 @@ export const CinematicMilestone: React.FC<CinematicMilestoneProps> = ({
               <div className="h-8 w-px bg-muted-espresso/15" />
               <div className="text-center">
                 <span className="block text-[10px] text-muted-espresso uppercase font-bold tracking-wider">Total Contribution</span>
-                <span className="text-2xl font-black text-primary-espresso font-mono">{(milestoneNumber * 1000).toLocaleString()} pts</span>
+                <span className="text-2xl font-black text-primary-espresso font-mono">{(milestoneNumber * METER_THRESHOLD).toLocaleString()} pts</span>
               </div>
             </div>
 

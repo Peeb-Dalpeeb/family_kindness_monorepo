@@ -17,10 +17,11 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import { KindnessEntryRefinedSchema, type DashboardMetrics } from '@family-kindness/shared';
+import { KindnessEntryRefinedSchema, resolvePoints, METER_THRESHOLD, type DashboardMetrics } from '@family-kindness/shared';
 import { loginHandler, logoutHandler, authStatusHandler, requireAdmin } from './middleware/auth.js';
 import { UserModel } from './models/User.js';
 import { KindnessEntryModel } from './models/KindnessEntry.js';
+import packageJson from '../package.json' with { type: 'json' };
 
 // ── Express Async Handler Wrapper ────────────────────────────
 
@@ -118,8 +119,8 @@ async function getHouseholdMetrics(
         _id: 0,
         totalPoints: 1,
         totalLogs: 1,
-        completedMilestones: { $floor: { $divide: ['$totalPoints', 1000] } },
-        currentProgressPoints: { $mod: ['$totalPoints', 1000] },
+        completedMilestones: { $floor: { $divide: ['$totalPoints', METER_THRESHOLD] } },
+        currentProgressPoints: { $mod: ['$totalPoints', METER_THRESHOLD] },
       },
     },
     {
@@ -128,7 +129,7 @@ async function getHouseholdMetrics(
         totalLogs: 1,
         completedMilestones: 1,
         currentProgressPoints: 1,
-        percentage: { $floor: { $multiply: [{ $divide: ['$currentProgressPoints', 1000] }, 100] } },
+        percentage: { $floor: { $multiply: [{ $divide: ['$currentProgressPoints', METER_THRESHOLD] }, 100] } },
       },
     },
   ]);
@@ -160,6 +161,8 @@ app.use(cookieParser());
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    version: packageJson.version,
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
@@ -224,15 +227,8 @@ app.post(
       return;
     }
 
-    // Resolve server-side points based on deterministic rules
-    let resolvedPoints = pointsAwarded;
-    if (category === 'Kind Words') {
-      resolvedPoints = 10;
-    } else if (category === 'Showing Gratitude') {
-      resolvedPoints = 15;
-    } else if (category === 'Helping Hand') {
-      resolvedPoints = 20;
-    }
+    // Resolve server-side points using shared utility
+    const resolvedPoints = resolvePoints(category, pointsAwarded);
 
     const newEntry = new KindnessEntryModel({
       submittedBy,
@@ -319,15 +315,8 @@ app.put(
       return;
     }
 
-    // Resolve server-side points
-    let resolvedPoints = pointsAwarded;
-    if (category === 'Kind Words') {
-      resolvedPoints = 10;
-    } else if (category === 'Showing Gratitude') {
-      resolvedPoints = 15;
-    } else if (category === 'Helping Hand') {
-      resolvedPoints = 20;
-    }
+    // Resolve server-side points using shared utility
+    const resolvedPoints = resolvePoints(category, pointsAwarded);
 
     const updatedEntry = await KindnessEntryModel.findByIdAndUpdate(
       id,
@@ -338,7 +327,7 @@ app.put(
         pointsAwarded: resolvedPoints,
         description,
       },
-      { new: true },
+      { new: true, runValidators: true },
     );
 
     if (!updatedEntry) {

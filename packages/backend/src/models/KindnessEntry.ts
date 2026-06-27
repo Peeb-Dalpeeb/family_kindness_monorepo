@@ -1,4 +1,10 @@
 import { Schema, model } from 'mongoose';
+import {
+  KINDNESS_CATEGORIES,
+  DESCRIPTION_MAX_LENGTH,
+  MIN_POSSIBLE_POINTS,
+  MAX_POSSIBLE_POINTS,
+} from '@family-kindness/shared';
 
 const KindnessEntrySchema = new Schema(
   {
@@ -6,11 +12,16 @@ const KindnessEntrySchema = new Schema(
     beneficiary: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     category: {
       type: String,
-      enum: ['Kind Words', 'Showing Gratitude', 'Helping Hand', 'Other'],
+      enum: [...KINDNESS_CATEGORIES],
       required: true,
     },
-    pointsAwarded: { type: Number, required: true, min: 5, max: 100 },
-    description: { type: String, required: true, maxlength: 200 },
+    pointsAwarded: {
+      type: Number,
+      required: true,
+      min: MIN_POSSIBLE_POINTS,
+      max: MAX_POSSIBLE_POINTS,
+    },
+    description: { type: String, required: true, maxlength: DESCRIPTION_MAX_LENGTH },
     timestamp: { type: Date, default: () => new Date() },
   },
   { timestamps: false },
