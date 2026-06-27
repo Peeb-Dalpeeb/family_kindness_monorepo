@@ -9,63 +9,41 @@ The application version is dynamically read from the `package.json` files:
 
 To update the dashboard version, you must update the version in these files.
 
-## Release Commands
-
-To ensure a clean git history and avoid npm errors due to modified workspace files, chain both commands on a single line using `&&` with the `--no-git-tag-version` flag, then manually commit and tag.
-
-### 1. Patch Release (e.g., `1.0.0` ➔ `1.0.1`)
-For bug fixes and minor tweaks:
-```bash
-npm version patch --workspaces --no-git-tag-version && npm version patch --no-git-tag-version
-```
-
-### 2. Minor Release (e.g., `1.0.0` ➔ `1.1.0`)
-For new backwards-compatible features:
-```bash
-npm version minor --workspaces --no-git-tag-version && npm version minor --no-git-tag-version
-```
-
-### 3. Major Release (e.g., `1.0.0` ➔ `2.0.0`)
-For breaking changes or major releases:
-```bash
-npm version major --workspaces --no-git-tag-version && npm version major --no-git-tag-version
-```
-
 ---
 
 ## Step-by-Step Release Workflow
 
-Follow these steps to complete a release:
+Follow these 3 steps to complete a release cycle. Since you are using **Git Bash**, these commands are optimized for your terminal.
 
-1. **Verify your working tree is clean:**
-   Ensure you have no uncommitted changes before bumping versions.
-   ```bash
-   git status
-   ```
+### Step 1: Pre-Flight Check
+Ensure you have no uncommitted changes before starting a release.
+```bash
+git status
+```
 
-2. **Run the version bump command:**
-   *(e.g., for a patch bump)*
-   ```bash
-   npm version patch --workspaces --no-git-tag-version && npm version patch --no-git-tag-version
-   ```
+### Step 2: Bump Versions
+Run **one** of the following commands depending on the type of release. This will safely bump the version across all workspace packages and the root package in one action.
 
-3. **Stage and commit all package.json updates:**
-   This creates exactly **one** clean commit for the release.
-   ```bash
-   git add .
-   # Replace 1.0.1 with the actual version bumped
-   git commit -m "chore: release v1.0.1"
-   ```
+**Patch Release** (e.g., `1.0.0` ➔ `1.0.1` for bug fixes):
+```bash
+npm version patch --workspaces --no-git-tag-version && npm version patch --no-git-tag-version
+```
 
-4. **Tag the commit:**
-   Create a single global git tag pointing to this commit.
-   ```bash
-   git tag v1.0.1
-   ```
+**Minor Release** (e.g., `1.0.0` ➔ `1.1.0` for new features):
+```bash
+npm version minor --workspaces --no-git-tag-version && npm version minor --no-git-tag-version
+```
 
-5. **Push the commits and tag to remote:**
-   This updates the main branch and pushes the tag to trigger any deployment workflows.
-   ```bash
-   git push origin main --tags
-   ```
+**Major Release** (e.g., `1.0.0` ➔ `2.0.0` for breaking changes):
+```bash
+npm version major --workspaces --no-git-tag-version && npm version major --no-git-tag-version
+```
 
+### Step 3: Stage, Commit, Tag, and Push
+After bumping the version, you must commit the changes, create a git tag, and push it to trigger your deployment pipeline (like Render). 
+
+To avoid typos, define the `NEW_VERSION` variable at the start of the command (replace `v1.0.2` with your actual new version), and then copy and paste the entire block:
+
+```bash
+NEW_VERSION="v1.0.2" && git add . && git commit -m "chore: release $NEW_VERSION" && git tag $NEW_VERSION && git push origin main --tags
+```
